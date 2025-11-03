@@ -1,8 +1,12 @@
-# Write your MySQL query statement below
-select sample_id,dna_sequence,species,
-dna_sequence regexp '^ATG' as has_start,
-dna_sequence regexp 'TAA$|TAG$|TGA$' as has_stop,
-dna_sequence regexp 'ATAT' as has_atat,
-dna_sequence regexp 'GGG' as has_ggg
-from samples
-order by sample_id
+SELECT 
+  sample_id,
+  dna_sequence,
+  species,
+  dna_sequence LIKE 'ATG%' AS has_start,   -- starts with ATG
+  (dna_sequence LIKE '%TAA' 
+   OR dna_sequence LIKE '%TAG' 
+   OR dna_sequence LIKE '%TGA') AS has_stop,   -- ends with stop codon
+  dna_sequence LIKE '%ATAT%' AS has_atat,  -- contains ATAT
+  dna_sequence LIKE '%GGG%' AS has_ggg     -- contains GGG
+FROM samples
+ORDER BY sample_id;
